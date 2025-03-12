@@ -2,39 +2,24 @@ import { useColorScheme } from '../../hooks/useColorScheme';
 import { View, Text, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors } from '../../constants/Colors';
-
-const notifications = [
-  { id: '1', type: 'like', user: 'Dakari', text: 'liked your post', time: '2h' },
-  { id: '2', type: 'retweet', user: 'ProfessorHaifi', text: 'retweeted your post', time: '4h' },
-  { id: '3', type: 'retweet', user: 'SAIT', text: 'retweeted your post', time: '6h' },
-  { id: '4', type: 'retweet', user: 'Saheed', text: 'retweeted your post', time: '8h' },
-  { id: '5', type: 'like', user: 'Hotdogs', text: 'liked your post', time: '10h' },
-  { id: '6', type: 'like', user: 'Puppies', text: 'liked your post', time: '12h' },
-  { id: '7', type: 'like', user: 'Kittens', text: 'liked your post', time: '14h' },
-  { id: '8', type: 'retweet', user: 'Babies', text: 'retweeted your post', time: '16h' },
-  { id: '9', type: 'like', user: 'Minions', text: 'liked your post', time: '18h' },
-  { id: '10', type: 'retweet', user: 'Puppies', text: 'retweeted your post', time: '20h' },
-];
+import { mockNotifications } from '../data/notifications';
+import { Notification } from '../types'; // Type import
 
 export default function NotificationsScreen() {
   const { colorScheme } = useColorScheme() as unknown as { colorScheme: 'light' | 'dark' };
   const themeColors = Colors[colorScheme ?? 'light'];
 
-  const renderItem = ({ item }: { item: typeof notifications[0] }) => (
+  const renderItem = ({ item }: { item: Notification }) => (
     <View style={[styles.notificationItem, { 
       borderBottomColor: themeColors.border,
       backgroundColor: themeColors.background 
     }]}>
       <View style={styles.iconContainer}>
-        {item.type === 'like' ? (
-          <Ionicons name="heart" size={24} color="#e0245e" />
-        ) : (
-          <Ionicons name="repeat" size={24} color="#17bf63" />
-        )}
+        {getNotificationIcon(item.type)}
       </View>
       <View style={styles.content}>
         <Text style={[styles.text, { color: themeColors.text, lineHeight: 24 }]} numberOfLines={2}>
-          <Text style={styles.bold}>@{item.user}</Text> {item.text}
+          <Text style={styles.bold}>{item.handle}</Text> {item.text}
         </Text>
         <Text style={[styles.time, { color: themeColors.secondaryText, marginTop: 8 }]}>
           {item.time}
@@ -56,7 +41,7 @@ export default function NotificationsScreen() {
         </View>
 
         <FlatList
-          data={notifications}
+          data={mockNotifications}
           renderItem={renderItem}
           keyExtractor={item => item.id}
           contentContainerStyle={styles.listContent}
@@ -72,6 +57,24 @@ export default function NotificationsScreen() {
     </SafeAreaView>
   );
 }
+
+// Helper function for icons
+const getNotificationIcon = (type: Notification['type']) => {
+  switch(type) {
+    case 'like':
+      return <Ionicons name="heart" size={24} color="#e0245e" />;
+    case 'retweet':
+      return <Ionicons name="repeat" size={24} color="#17bf63" />;
+    case 'reply':
+      return <Ionicons name="chatbubble" size={24} color={Colors.light.tint} />;
+    case 'quote':
+      return <Ionicons name="swap-horizontal-outline" size={24} color={Colors.light.tint} />;
+    case 'follow':
+      return <Ionicons name="person-add" size={24} color={Colors.light.tint} />;
+    default:
+      return <Ionicons name="notifications" size={24} color={Colors.light.tint} />;
+  }
+};
 
 const styles = StyleSheet.create({
   container: {

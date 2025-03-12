@@ -50,7 +50,7 @@ export default function TabLayout() {
         options={{
           title: 'Notifications',
           tabBarIcon: ({ color }) => (
-            <Ionicons name="notifications" size={24} color={color} />
+            <Ionicons name="notifications-outline" size={24} color={color} />
           ),
         }}
       />
