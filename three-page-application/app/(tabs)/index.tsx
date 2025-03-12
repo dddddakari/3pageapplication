@@ -6,6 +6,7 @@
   	import { useState } from 'react';
     import { mockTweets } from '../data/tweet';
     import { Tweet } from '../types';
+import Fab from '@/components/Fab';
 
 export default function HomeScreen() {
   const [tweets, setTweets] = useState<Tweet[]>(mockTweets);
@@ -101,6 +102,7 @@ export default function HomeScreen() {
                   {item.likes}
                 </Text>
               </TouchableOpacity>
+              
             </View>
           </View>
         </View>
@@ -132,6 +134,10 @@ export default function HomeScreen() {
               ListFooterComponent={<View style={{ height: 32 }} />}
             />
           </View>
+          <Fab 
+            onPress={() => console.log('Create new post')}
+            tabBarHeight={40} // Match your tab bar's actual height
+          />
         </SafeAreaView>
       );
     }
